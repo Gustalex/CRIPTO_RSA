@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CRIPTO_RSA
 {
 
-    public class Gerar_Chave
+    internal class GerarChave
     {
      public ulong Mdc(ulong a, ulong b)
         {
