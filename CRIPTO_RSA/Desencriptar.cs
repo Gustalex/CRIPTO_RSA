@@ -1,41 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Numerics;
 
 namespace CRIPTO_RSA
 {
     internal class Desencriptar
     {
-        public ulong Modexp(ulong b, ulong exp, ulong mod)
-        { 
-            ulong res = 1;
+        public BigInteger Modexp(BigInteger b, BigInteger exp, BigInteger mod)
+        {
+            BigInteger res = 1;
             while (exp > 0)
             {
-                if ((exp & 1) == 1)
+                if (exp.IsEven)
                 {
-                    res = (res * b) % mod;
+                    b = BigInteger.ModPow(b, 2, mod);
+                    exp /= 2;
                 }
-                exp >>= 1;
-                b = (b * b) % mod;
+                else
+                {
+                    res = BigInteger.ModPow(b, res, mod);
+                    exp -= 1;
+                }
             }
             return res;
         }
-        public ulong Calculard(ulong e, ulong phi)
+
+        public BigInteger Calculard(BigInteger e, BigInteger phi)
         {
-            ulong d = 0;
-            ulong x1 = 0, x2 = 1, y1 = 1, tempPhi = phi;
+            BigInteger d = 0;
+            BigInteger x1 = 0, x2 = 1, y1 = 1, tempPhi = phi;
 
             while (e > 0)
             {
-                ulong temp1 = tempPhi / e;
-                ulong temp2 = tempPhi - temp1 * e;
+                BigInteger temp1 = BigInteger.DivRem(tempPhi, e, out BigInteger temp2);
                 tempPhi = e;
                 e = temp2;
 
-                ulong x = x2 - temp1 * x1;
-                ulong y = d - temp1 * y1;
+                BigInteger x = x2 - temp1 * x1;
+                BigInteger y = d - temp1 * y1;
 
                 x2 = x1;
                 x1 = x;
@@ -47,16 +50,18 @@ namespace CRIPTO_RSA
                 return d + phi;
             }
             return d;
-
         }
-        public void DescriptoAsc(ulong[] crip, string str, ulong d, ulong n)
+
+        public void DescriptoAsc(BigInteger[] crip, string str, BigInteger d, BigInteger n)
         {
-            for(int i = 0; i < str.Length; i++)
+            crip = new BigInteger[str.Length]; // Inicializa o array crip com o tamanho correto
+            for (int i = 0; i < str.Length; i++)
             {
-                ulong valdcrptd = Modexp(crip[i], d, n);
-                str += (char)valdcrptd;
+                BigInteger valdcrptd = Modexp((BigInteger)str[i], d, n);
+                crip[i] = valdcrptd; // Armazena o valor descriptografado no array crip
             }
         }
+
         public void Escrever(string str)
         {
             using (StreamWriter writer = new StreamWriter("mensagem_descriptografada.txt"))
@@ -66,5 +71,4 @@ namespace CRIPTO_RSA
             }
         }
     }
-
 }

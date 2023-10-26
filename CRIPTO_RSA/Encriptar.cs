@@ -1,35 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Numerics;
 
 namespace CRIPTO_RSA
 {
     internal class Encriptar
     {
-        public ulong Modexp(ulong b, ulong exp, ulong mod)
+        public BigInteger Modexp(BigInteger b, BigInteger exp, BigInteger mod)
         {
-            ulong res = 1;
+            BigInteger res = 1;
             while (exp > 0)
             {
-                if ((exp & 1) == 1)
+                if (exp.IsEven)
                 {
-                    res = (res * b) % mod;
+                    b = BigInteger.ModPow(b, 2, mod);
+                    exp /= 2;
                 }
-                exp >>= 1;
-                b = (b * b) % mod;
+                else
+                {
+                    res = BigInteger.ModPow(b, res, mod);
+                    exp -= 1;
+                }
             }
             return res;
         }
-        public void CriptoAsc(string str, ulong[] novaStr, ulong e, ulong n)
+
+        public void CriptoAsc(string str, BigInteger[] novaStr, BigInteger e, BigInteger n)
         {
             for (int i = 0; i < str.Length; i++)
             {
-                novaStr[i] = Modexp((ulong)str[i], e, n);
+                novaStr[i] = Modexp((BigInteger)str[i], e, n);
             }
         }
-        public void Escrever(ulong[] novaStr)
+
+        public void Escrever(BigInteger[] novaStr)
         {
             using (StreamWriter writer = new StreamWriter("mensagem_criptografada.txt"))
             {
