@@ -13,21 +13,23 @@ namespace CRIPTO_RSA
         {
             for (int i = 0; i < str.Length; i++)
             {
-                int ascii_val = (int)str[i];
-                crip[i] = calc.Modexp(ascii_val, e, n);
+                BigInteger ascii_val = (BigInteger)str[i];
+                crip[i] = BigInteger.ModPow(ascii_val, e, n);
             }
         }
 
-        public void Escrever(BigInteger[] crip)
+
+        public void Escrever(string str, BigInteger[] crip)
         {
             using (StreamWriter writer = new StreamWriter("mensagem_criptografada.txt"))
             {
                 writer.WriteLine("Mensagem Criptografada:");
-                for(int i = 0; i < crip.Length; i++)
+                for (int i = 0; i < crip.Length; i++)
                 {
                     writer.Write(crip[i] + " ");
                 }
             }
         }
+
     }
 }
