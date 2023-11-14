@@ -14,10 +14,12 @@ class Program
         GerarPrimos primo = new GerarPrimos();
         GerarChave chave = new GerarChave();
 
+
         BigInteger p = 0;
         BigInteger q = 0;
         BigInteger e = 0;
         BigInteger n = 0;
+        BigInteger d = 0;
 
         while (opcao != 5)
         {
@@ -67,8 +69,11 @@ class Program
                 case 3:
                     Console.WriteLine("Digite o valor de e:");
                     e = BigInteger.Parse(Console.ReadLine());
-                    Console.WriteLine("Digite o valor de n:");
-                    n = BigInteger.Parse(Console.ReadLine());
+                    Console.WriteLine("Digite o valor de p:");
+                    p = BigInteger.Parse(Console.ReadLine());
+                    Console.WriteLine("Digite o valor de q:");
+                    q = BigInteger.Parse(Console.ReadLine());
+                    n = p * q;
                     Console.WriteLine("Digite a mensagem:");
                     string str = Console.ReadLine();
                     BigInteger[] crip = new BigInteger[str.Length];
@@ -78,7 +83,26 @@ class Program
                     Console.WriteLine("Mensagem criptografada com sucesso.\n");
                     break;
                 case 4:
+                    Desencriptar desencrip = new Desencriptar();
+                    Console.WriteLine("Digite o valor de d:");
+                    d = BigInteger.Parse(Console.ReadLine());
+                    Console.WriteLine("Digite o valor de n:");
+                    n = BigInteger.Parse(Console.ReadLine());
+
+                    string str2 = File.ReadAllText(currentDirectory + "/mensagem_criptografada.txt");
+
+                    string[] cripStrings = str2.Split(' ');
+                    BigInteger[] crip2 = new BigInteger[cripStrings.Length];
+
+                    for (int i = 0; i < cripStrings.Length; i++)
+                    {
+                        crip2[i] = BigInteger.Parse(cripStrings[i]);
+                    }
+
+                    string mensagemDescriptografada = desencrip.DesencriptoAsc(crip2, str2, d, n);
+                    desencrip.Escrever(mensagemDescriptografada);
                     break;
+
                 case 5:
                     Console.WriteLine("Saindo.");
                     break;

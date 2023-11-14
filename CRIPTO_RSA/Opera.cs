@@ -31,24 +31,31 @@ namespace CRIPTO_RSA
             }
             return true;
         }
-        public BigInteger Modexp(BigInteger b, BigInteger exp, BigInteger mod)
+        public BigInteger Modexp(BigInteger bse, BigInteger exp, BigInteger mod)
         {
-            BigInteger res = 1;
+            if (mod <= 0)
+            {
+                // Tratar caso especial onde mod é zero ou negativo
+                throw new ArgumentException("O valor de 'mod' deve ser positivo e diferente de zero.");
+            }
+
+            BigInteger result = 1;
+            bse = bse % mod;
+
             while (exp > 0)
             {
-                if (exp.IsEven)
+                if (exp % 2 == 1)
                 {
-                    b = BigInteger.ModPow(b, 2, mod);
-                    exp /= 2;
+                    result = (result * bse) % mod;
                 }
-                else
-                {
-                    res = BigInteger.ModPow(b, res, mod);
-                    exp -= 1;
-                }
+                bse = (bse * bse) % mod;
+                exp = exp / 2;
             }
-            return res;
+
+            return result;
         }
+
+
         public BigInteger Calculard(BigInteger e, BigInteger phi)
         {
             BigInteger d = 0;

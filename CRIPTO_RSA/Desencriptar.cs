@@ -13,7 +13,7 @@ namespace CRIPTO_RSA
         {
             List<char> decryptedChars = new List<char>();
 
-            for (int i = 0; i < str.Length; i++)
+            for (int i = 0; i < crip.Length; i++)
             {
                 BigInteger desencrpt_val = calc.Modexp(crip[i], d, n);
                 decryptedChars.Add((char)desencrpt_val);
@@ -23,6 +23,7 @@ namespace CRIPTO_RSA
 
             return decryptedString;
         }
+
 
 
         public void Escrever(string str)
