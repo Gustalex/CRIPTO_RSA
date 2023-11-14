@@ -19,86 +19,34 @@ BigInteger q = 0;
 BigInteger e = 0;
 BigInteger n = 0;
 
+Opera calc = new Opera();
+GerarChave chave = new GerarChave();
+
 switch (opcao)
 {
     case 1:
-        GerarPrimos gerarPrimos = new GerarPrimos();
-        BigInteger primo1 = gerarPrimos.GerarPrimo();
-        BigInteger primo2 = gerarPrimos.GerarPrimo();
-        string arquivoPrimos = Path.Combine(currentDirectory, "primos.txt");
-        using (StreamWriter writer = new StreamWriter(arquivoPrimos))
-        {
-            writer.WriteLine("Primos:");
-            writer.WriteLine("Primo 1: " + primo1);
-            writer.WriteLine("Primo 2: " + primo2);
-            Console.WriteLine("Primos gerados com sucesso! Arquivo: " + arquivoPrimos);
-        }
-        break;
-
-    case 2:
-        GerarChave gerarChave = new GerarChave();
-        Console.WriteLine("Digite o primeiro primo: ");
+        Console.WriteLine("Digite o valor de p:");
         p = BigInteger.Parse(Console.ReadLine());
-        while (!gerarChave.Checkprimo(p))
+        while (!calc.Checkprimo(p))
         {
-            Console.WriteLine("O número digitado não é primo. Digite novamente: ");
+            Console.WriteLine("O valor de p não é primo, digite outro valor:");
             p = BigInteger.Parse(Console.ReadLine());
         }
-        Console.WriteLine("Digite o segundo primo: ");
+        Console.WriteLine("Digite o valor de q:");
         q = BigInteger.Parse(Console.ReadLine());
-        while (!gerarChave.Checkprimo(q))
+        while (!calc.Checkprimo(q))
         {
-            Console.WriteLine("O número digitado não é primo. Digite novamente: ");
+            Console.WriteLine("O valor de q não é primo, digite outro valor:");
             q = BigInteger.Parse(Console.ReadLine());
         }
-        Console.WriteLine("Digite o expoente: ");
+        Console.WriteLine("Digite o valor de e");
         e = BigInteger.Parse(Console.ReadLine());
-        while (gerarChave.Mdc(e, (p - 1) * (q - 1)) != 1)
+        while (calc.Mdc(e, (p - 1) * (q - 1)) != 1)
         {
-            Console.WriteLine("O expoente deve ser coprimo com (p - 1) * (q - 1). Digite novamente: ");
+            Console.WriteLine("O valor de e não é coprimo com (p-1)*(q-1), digite outro valor:");
             e = BigInteger.Parse(Console.ReadLine());
         }
-        gerarChave.Genchave(p, q, e);
+        chave.Genchave(p, q, e);
         break;
 
-    case 3:
-        Encriptar encriptar = new Encriptar();
-        Console.WriteLine("Digite a mensagem: ");
-        string str = Console.ReadLine();
-        BigInteger[] novaStr = new BigInteger[str.Length];
-        Console.WriteLine("Digite o expoente: ");
-        e = BigInteger.Parse(Console.ReadLine());
-        Console.WriteLine("Digite o n: ");
-        n = BigInteger.Parse(Console.ReadLine());
-        encriptar.CriptoAsc(str, novaStr, e, n);
-        encriptar.Escrever(novaStr);
-        break;
-
-    case 4:
-        Console.WriteLine("Digite o primeiro primo: ");
-        p = BigInteger.Parse(Console.ReadLine());
-        Console.WriteLine("Digite o segundo primo: ");
-        q = BigInteger.Parse(Console.ReadLine());
-        if (p == 0 || q == 0)
-        {
-            Console.WriteLine("Forneça valores válidos de p e q");
-        }
-        else
-        {
-            Desencriptar desencriptar = new Desencriptar();
-            Console.WriteLine("Digite a mensagem: ");
-            str = Console.ReadLine();
-            BigInteger[] crip = new BigInteger[str.Length];
-            Console.WriteLine("Digite o expoente: ");
-            e = BigInteger.Parse(Console.ReadLine());
-            n = p * q;
-            BigInteger phi = (p - 1) * (q - 1);
-            BigInteger d = desencriptar.Calculard(e, phi);
-            desencriptar.DescriptoAsc(crip, str, d, n);
-            desencriptar.Escrever(str);
-        }
-        break;
-
-    case 5:
-        break;
 }
